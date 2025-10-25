@@ -4,10 +4,13 @@ import requests
 
 
 def top_ten(subreddit):
-
-    headers = {'User-Agent': 'MyAPI/0.0.1'}
+    headers = {
+        'User-Agent': 'MyAPI/0.0.1',
+        'Accept': 'application/json' 
+    }
     params = {'limit': 10}
-    subreddit_url = "https://reddit.com/r/{}.json".format(subreddit)
+    
+    subreddit_url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     
     response = requests.get(
         subreddit_url,
@@ -23,7 +26,6 @@ def top_ten(subreddit):
     try:
         json_data = response.json()
         
-        # Check if the "children" list exists and has content (a final check)
         posts = json_data.get('data', {}).get('children', [])
         
         if not posts:
@@ -36,5 +38,4 @@ def top_ten(subreddit):
                 print(title)
 
     except (requests.exceptions.JSONDecodeError, AttributeError):
-        # Handle cases where the response is not valid JSON or the structure is unexpected
         print(None)
